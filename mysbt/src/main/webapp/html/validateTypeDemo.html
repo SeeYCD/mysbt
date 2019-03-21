@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!-- demofrom http://www.jeasyui.com/extension/treegrid_dnd.php -->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>jQuery EasyUI</title>
+	<link rel="stylesheet" type="text/css" href="../css/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../css/themes/icon.css">
+	<script type="text/javascript" src="../js/common/jquery.1.12.4.min.js"></script>
+	<script type="text/javascript" src="../js/common/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../js/common/treegrid-dnd.js"></script>
+	<script type="text/javascript" src="../js/common/form.js"></script>
+ 
+</head>
+<body>
+	<h1>validate test demo </h1>
+	<form id="validateForm">
+		<input id="valiadate1" name="valiadate1" type="text" class="easyui-validatebox" />
+		<input id="valiadate2" name="valiadate2" type="text" class="easyui-validatebox" />
+		<input id="versiondate" type="text" class="easyui-datebox" required="required">
+  	</form>
+ </body>
+<script type="text/javascript">
+	$(function(){
+		initValidatebox();
+		$("#valiadate1").validatebox({
+			required:true,
+			validType:['length[0,10]','minLength[5]']
+		});
+		$("#valiadate2").validatebox({
+			required:true,
+			validType:['length[0,10]','minLength[5]',"equals['#valiadate1']"]
+ 		});
+		var submit=document.createElement("a");
+ 		$("#validateForm").append(submit);
+ 		$(submit).linkbutton({
+ 			text:'submit',
+ 			id:'validatesubmit'
+ 		});
+ 		$("#validatesubmit").click(function(){
+ 			if($("#validateForm").form('validate')){
+ 				alert('validate is ok ');
+ 			}
+ 		});
+ 	});
+</script>
+</html>

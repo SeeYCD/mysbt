@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!-- demofrom http://www.jeasyui.com/extension/treegrid_dnd.php -->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>jQuery EasyUI</title>
+	<link rel="stylesheet" type="text/css" href="../css/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../css/themes/icon.css">
+	<script type="text/javascript" src="../js/common/jquery.1.12.4.min.js"></script>
+	<script type="text/javascript" src="../js/common/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../js/common/treegrid-dnd.js"></script>
+	<script type="text/javascript" src="../js/common/form.js"></script>
+ 
+</head>
+<body>
+	<h1>validate test demo </h1>
+	<form id="validateForm">
+		<input id="valiadate1" name="valiadate1" type="text" class="easyui-validatebox" />
+		<input id="valiadate2" name="valiadate2" type="text" class="easyui-validatebox" />
+   	</form>
+ </body>
+<script type="text/javascript">
+	$(function(){
+		var submit=document.createElement("a");
+		$("#validateForm").append(submit);
+ 		$(submit).linkbutton({
+ 			text:'submit',
+ 			id:'validatesubmit'
+ 		});
+ 		
+ 		$("#validateForm").append(submit);
+ 		$(submit).linkbutton({
+ 			text:'获取用户',
+ 			id:'usersubmit'
+ 		});
+ 		
+ 		$('#usersubmit').click(function(){
+ 			var ss=$('#valiadate2').val();
+			$.ajax({
+				url:getContextPath()+'/demo/userGet',
+				type:"get",
+				datatype:"json",
+				data:{'ss':ss},
+				success: function(data){
+					 alert(data);
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown){
+					alert(textStatus);
+					alert(errorThrown);
+				}
+			});
+ 		});
+ 		
+ 		$("#validatesubmit").click(function(){
+ 			var ss=$('#valiadate1').val();
+ 			alert(ss);
+		 	$.ajax({
+ 		 		url:getContextPath()+'/demo/helloWorld',
+				type:"get",
+				datatype:"json",
+				data:{'ss':ss},
+				success: function(data){
+					 alert(data);
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown){
+					alert(textStatus);
+					alert(errorThrown);
+				}
+		 	});
+ 		});
+  	});
+	function getContextPath(){
+	    var pathName = document.location.pathname;   
+	    var index = pathName.substr(1).indexOf("/");   
+	    var result = pathName.substr(0,index+1);   
+	    return result;   
+	} 
+</script>
+</html>

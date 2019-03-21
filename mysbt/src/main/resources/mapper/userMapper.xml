@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crh.dao.UserMapper">
+
+<!-- mybatis 二级缓存全局开关是默认开启的 ，-->
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache">
+		<property name="timeToIdleSeconds" value="60"></property><!--<!–当缓存闲置60秒后销毁–> -->
+		<property name="timeToLiveSeconds" value="160"></property><!--<!–缓存存在160秒后销毁–> -->
+		<property name="maxEntriesLocalHeap" value="1000"></property>
+		<property name="maxEntriesLocalDisk" value="10000000"></property>
+		<property name="memoryStoreEvictionPolicy" value="LRU"></property>
+	</cache>
+
+	<resultMap id="BaseResultMap" type="com.crh.entity.User">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="age" jdbcType="INTEGER" property="age" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, name, age, email
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from user
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.crh.entity.User">
+		insert into user (id, name,
+		age,
+		email)
+		values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+		#{age,jdbcType=INTEGER},
+		#{email,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into user (name,age,email) values
+		<foreach collection="list" item="i" separator=",">
+			(#{i.name},#{i.age},#{i.email})
+		</foreach>
+	</insert>
+	<insert id="insertSelective" parameterType="com.crh.entity.User">
+		insert into user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="age != null">
+				age,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="age != null">
+				#{age,jdbcType=INTEGER},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.crh.entity.User">
+		update user
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="age != null">
+				age = #{age,jdbcType=INTEGER},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.crh.entity.User">
+		update user
+		set
+		name = #{name,jdbcType=VARCHAR},
+		age = #{age,jdbcType=INTEGER},
+		email =
+		#{email,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- trim 标签练习 更新多个内容 -->
+	<update id="updateUserByList" parameterType="java.util.List">
+		<if test="list.size()>0">
+			update user set
+			<trim suffixOverrides=",">
+				<trim prefix=" name = case " suffix="end,">
+					<foreach collection="list" item="it">
+						when id=#{it.id} then
+						#{it.name}
+					</foreach>
+				</trim>
+			</trim>
+			where
+			<foreach collection="list" item="i" separator="or">
+				id= #{i.id}
+			</foreach>
+		</if>
+	</update>
+</mapper>
