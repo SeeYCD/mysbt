@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
@@ -20,8 +19,8 @@ public class Demo1 extends Demo2{
 				AppConfig.class);
 		
 		//从bean工厂取bean，如果没有就创建这个bean
-		BeanFactory factory = new XmlBeanFactory( new ClassPathResource ( "com/res/beans.xml" ) ) ;
-		factory.getBean("beanId");//实时创建
+//		BeanFactory factory = new XmlBeanFactory( new ClassPathResource ( "com/res/beans.xml" ) ) ;
+//		factory.getBean("beanId");//实时创建
 		//从ApplicationContext 中取 bean，会把beans.xml中的bean都实例化了；
 		ApplicationContext ac = new ClassPathXmlApplicationContext ( "com/res/beans.xml" ) ;
 		ac.getBean("beanId");

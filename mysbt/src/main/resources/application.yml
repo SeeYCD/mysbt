@@ -1,3 +1,5 @@
+############通过项目配置jdbc数据源连接池###################
+
 # redis配置，以下有默认配置的也可以使用默认配置
   redis:
     host: 127.0.0.1
@@ -26,10 +28,16 @@
       #type指定数据源
       type: com.alibaba.druid.pool.DruidDataSource
     
-#公共配置与profiles选择无关
+#mapper扫描与datasource配合，如果采用jndi需要在java-config中扫描
   mybatis:
     typeAliasesPackage: com.crh.entity
     mapperLocations: classpath:mapper/*.xml
+  pagehelper:
+    autoRuntimeDialect: true
+    #helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
 # spring.datasource.type=com.zaxxer.hikari.HikariDataSource
 # spring.datasource.type=org.apache.tomcat.jdbc.pool.DataSource
 # spring.datasource.type=org.apache.commons.dbcp.BasicDataSource

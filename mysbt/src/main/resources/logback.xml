@@ -25,13 +25,13 @@
   <if condition='p("log.dev").contains("true")'>
 	  <then>
 	  	<!-- additivity false 只会输出到引入的appender 不向更高级传递 -->
-	  	<logger name="myproject.frame.dao" level="debug" additivity="false">
+	  	<logger name="com.crh.dao" level="debug" additivity="false">
 	  		<appender-ref ref="STDOUT"/>
 	  	</logger>
 	  </then>
   </if>   
  	  	
-  <root level="debug">             
+  <root level="info">             
     <appender-ref ref="STDOUT" /> 
    <!--  <appender-ref ref="ROLLFILE"/>   -->
   </root>     
