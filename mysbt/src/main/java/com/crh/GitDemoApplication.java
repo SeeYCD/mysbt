@@ -1,21 +1,13 @@
 package com.crh;
 
-import junit.framework.TestCase;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * springboot测试
@@ -26,13 +18,14 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author Chen
  *
  */
-//scanBasePackages 扫描路径
-@SpringBootApplication(scanBasePackages = { "com.crh.controller",
-		"com.crh.redis", "com.crh.service" })
+//scanBasePackages 扫描路径  @ComponentScan(basePackages = {"com.crh.controller", "com.crh.redis"})
+@SpringBootApplication(scanBasePackages = { 
+		"com.crh.controller",
+		"com.crh.redis",
+		"com.crh.service"})
+//		"com.crh.config.database" })JNDI配置的数据源，不需要时，不用扫描
 //mybatis扫描dao接口路径
-@MapperScan("com.crh.dao")
-// @ComponentScan(basePackages = {"com.crh.controller", "com.crh.redis"})
-
+@MapperScan("com.crh.dao") //jndi数据源，暂时不在这里扫描dao
 
 public class GitDemoApplication extends SpringBootServletInitializer {
 	private static Logger log = LoggerFactory
@@ -40,14 +33,13 @@ public class GitDemoApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(GitDemoApplication.class, args);
-		log.info("GitDemoApplication is begin-------111111---");
+		log.info("GitDemoApplication is begin---gogogo--gogogo--gogogo--gogogo-");
 
 	}
 
 	@Override
 	protected SpringApplicationBuilder configure(
 			SpringApplicationBuilder builder) {
-		log.info("GitDemoApplication is begin-------222222---");
 		return super.configure(builder);
 	}
 	

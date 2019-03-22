@@ -1,0 +1,40 @@
+#########################JNDI数据源配置文件#######################3
+# redis配置，以下有默认配置的也可以使用默认配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    pool:
+      max-active: 8
+      max-wait: 1
+      max-idle: 8
+      min-idle: 0
+    timeout: 0
+  #server:
+   # port: 8088
+    #servlet:
+    #  context-path: /mysbt
+  spring:
+    datasource:
+      jndi-name: java:comp/env/jndi/mysql
+##############【enabled设置为false后，配置jndi连接后，启动tomcat不会报bean已经注册的问题;】
+##############【也可以在配置类中@EnableMBeanExport(registration=RegistrationPolicy.IGNORE_EXISTING)】
+    jmx:
+      enabled: false
+#自定义配置，配置类需要mapper路径
+  mybatisp:
+    mapperpath: classpath:mapper/*.xml
+#分页插件配置
+  pagehelper:
+    autoRuntimeDialect: true
+    #helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+#jndi配置需要在javaconfig中扫描
+  #mybatis:
+    #typeAliasesPackage: com.crh.entity
+    #mapperLocations: classpath:mapper/*.xml
+# spring.datasource.type=com.zaxxer.hikari.HikariDataSource
+# spring.datasource.type=org.apache.tomcat.jdbc.pool.DataSource
+# spring.datasource.type=org.apache.commons.dbcp.BasicDataSource
+# spring.datasource.type=org.apache.commons.dbcp2.BasicDataSource
