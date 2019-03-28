@@ -20,5 +20,7 @@ public interface UserMapper {
     int insertBatch(List<User> list);
     
     int updateUserByList(List<User> list);
-
+    
+    int insertScoreBatch(List<User> list);
+ 
 }

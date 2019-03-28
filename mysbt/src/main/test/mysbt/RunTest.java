@@ -36,7 +36,24 @@ public class RunTest {
 	ServiceUser serviceUser;
 //	@Autowired
 	private TestRestTemplate restTemplate;
-
+//插入分数数据
+	@Test
+	public void insertBatchScore() {
+		User u = null;
+		List<User> list = new ArrayList<User>();
+		for (int i = 0; i < 100; i++) {
+			u = new User();
+			u.setScore(i);
+			u.setName("阿狗"+i);
+			u.setStudentid("2019"+i);
+			u.setClassStudent(1);
+			u.setGrade(2);
+			list.add(u);
+		}
+		userMapper.insertScoreBatch(list);
+   		TestCase.assertEquals(1, 1);
+	}
+	
 	/**
 	 * 测试批量插入
 	 */
@@ -54,7 +71,7 @@ public class RunTest {
  		TestCase.assertEquals(1, 1);
 	}
 
-	@Test
+//	@Test
 	public void test2() {
 		serviceUser.selectByPrimaryKey(Integer.valueOf("2"));
 	}

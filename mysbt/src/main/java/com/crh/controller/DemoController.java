@@ -1,11 +1,15 @@
 package com.crh.controller;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -58,11 +62,12 @@ public class DemoController {
 		}
 		
 	}
-	@GetMapping(value="/userGet")
-	public String getUser(String ss){
+	@RequestMapping(value="/userGet.do",method=RequestMethod.GET)
+ 	public String getUser(String ss,String username){
+		log.info("ss:"+ss+"un:"+username);
 		User u=null;
 		try{
-			log.info("1========================="+serviceUser.getClass());
+ 			log.info("1========================="+serviceUser.getClass());
 			log.info("userGet-------------------id:"+ss);
 			u=serviceUser.selectByPrimaryKey(Integer.valueOf(ss));
 			log.info("userGet-------------------user:"+u);

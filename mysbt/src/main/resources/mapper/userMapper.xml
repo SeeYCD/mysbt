@@ -118,4 +118,11 @@
 			</foreach>
 		</if>
 	</update>
+	
+	<insert id="insertScoreBatch" parameterType="java.util.List">
+		insert into score (studentid,name,class,grade,score) values
+		<foreach collection="list" item="i" separator=",">
+			(#{i.studentid},#{i.name},#{i.classStudent},#{i.grade},#{i.score})
+		</foreach>
+	</insert>
 </mapper>
