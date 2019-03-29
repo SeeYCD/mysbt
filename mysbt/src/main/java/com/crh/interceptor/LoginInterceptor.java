@@ -2,6 +2,7 @@ package com.crh.interceptor;
 
 import java.io.PrintWriter;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,8 +13,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.crh.entity.Constants;
 import com.crh.entity.User;
 import com.crh.redis.RedisUtil;
+import com.crh.utils.CookieUtil;
+import com.crh.utils.SessionUtils;
 @Component
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 	private Logger log=LoggerFactory.getLogger(LoginInterceptor.class);
@@ -33,7 +37,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		log.info("进入LoginInterceptor");
+		log.info("【进入LoginInterceptor】");
  		String login=request.getHeader("REFERER");
  		String url=request.getRequestURL().toString();
  		log.info("login:"+login+",url:"+url);
@@ -42,20 +46,21 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 //			return true;
 //		}
 		if(url!=null&&url.endsWith("dologin.do")) {
-			log.info(request.getParameter("username")+":dologin--------");
+			log.info(request.getParameter("name")+":【doinglogin】");
 			return true;
 		}
 		User user = (User) request.getSession().getAttribute("user");
 		if (user== null) {
-	 		String name=request.getParameter("username");
-	 		boolean islogin=true;
-	 		if(name==null) {
+			log.info("【Session】中没有user");
+  	 		String name=CookieUtil.getValue(CookieUtil.getCookieByName(request, "username"));
+ 	 		boolean islogin=true;
+	 		if(name==null) {//1.未登录
 	 			islogin=false;
-				log.error("未能读取：name");
+				log.info("【未登录】,cookie中未能读取：name");
 	 		}
- 			if(islogin&&(user=(User) redsiU.get(name))==null) {
+  			if(islogin&&redsiU.get(name)==null) {//2.redis可能已经过期
 	 			islogin=false;
-  				log.info("redis不存在:"+name);
+  				log.info("【redis】不存在:"+name);
 			}
  			if(!islogin) {
  				PrintWriter pw=null;
@@ -68,11 +73,29 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			
 				return false;
  			}
- 			log.info("redis存在:"+name);
+ 			log.info("【redis】存在:"+name);
+ 			//session中不存在，redis中存在，添加seesion；直接采用redis判断也可以
+ 			user=new User();user.setName(name);
   			request.getSession().setAttribute("user", user);
+  			SessionUtils.setSessionTime(request.getSession());
+  			redsiU.set(name, name,(long) Constants.SESSIONTIME);
 		}
 
 		return super.preHandle(request, response, handler);
 	}
 
+	/**
+	 * 获取cookie中用户名
+	 * @param request
+	 * @return
+	 */
+	public String getUserName(HttpServletRequest request) {
+		Cookie[] cookies=request.getCookies();
+		for(Cookie ck:cookies) {
+			if("username".equalsIgnoreCase(ck.getName())) {
+				return ck.getValue();
+			}
+		}
+		return null;
+ 	}
 }
