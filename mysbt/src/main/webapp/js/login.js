@@ -15,11 +15,13 @@ $(function(){
 function dologin(){
 	var name=$('.name').val();
 	var password=$('.pwd').val();
+	var data={"name":name,"password":password};
 	$.ajax({
 		url:getContextPath()+'/dologin.do',
 		type:"get",
 		datatype:"json",
-		data:{'name':name,'password':password},
+//		data:{'name':name,'password':password},
+		data:data,
 		success: function(data){
 			if(data.statu=='suc'){
 				sessionStorage.setItem("username", data.user.name);
